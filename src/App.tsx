@@ -5,10 +5,13 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import Login from "./pages/Login";
+import Register from "./pages/Register";
+import AdminLogin from "./pages/AdminLogin";
 import Dashboard from "./pages/Dashboard";
 import LodgeComplaint from "./pages/LodgeComplaint";
 import MyComplaints from "./pages/MyComplaints";
 import AllComplaints from "./pages/AllComplaints";
+import AdminPanel from "./pages/AdminPanel";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -58,10 +61,20 @@ const AuthRoute = ({ children }: { children: React.ReactNode }) => {
 const AppRoutes = () => {
   return (
     <Routes>
-      {/* Public Route */}
+      {/* Public Routes */}
       <Route path="/" element={
         <AuthRoute>
           <Login />
+        </AuthRoute>
+      } />
+      <Route path="/register" element={
+        <AuthRoute>
+          <Register />
+        </AuthRoute>
+      } />
+      <Route path="/admin-login" element={
+        <AuthRoute>
+          <AdminLogin />
         </AuthRoute>
       } />
 
@@ -88,6 +101,13 @@ const AppRoutes = () => {
       <Route path="/all-complaints" element={
         <ProtectedRoute allowedRoles={['hod', 'admin', 'principal']}>
           <AllComplaints />
+        </ProtectedRoute>
+      } />
+
+      {/* Admin Only Routes */}
+      <Route path="/admin-panel" element={
+        <ProtectedRoute allowedRoles={['admin']}>
+          <AdminPanel />
         </ProtectedRoute>
       } />
 
