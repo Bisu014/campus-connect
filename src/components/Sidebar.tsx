@@ -50,6 +50,24 @@ const Sidebar: React.FC = () => {
       ];
     }
 
+    // Admin gets admin panel access
+    if (user.role === 'admin') {
+      return [
+        ...baseItems,
+        { 
+          path: '/all-complaints', 
+          label: 'All Complaints', 
+          icon: <FileText className="w-5 h-5" /> 
+        },
+        { 
+          path: '/admin-panel', 
+          label: 'Admin Panel', 
+          icon: <Shield className="w-5 h-5" /> 
+        },
+      ];
+    }
+
+    // HOD and Principal
     return [
       ...baseItems,
       { 

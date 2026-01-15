@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
-import { GraduationCap, Mail, ArrowRight, AlertCircle } from 'lucide-react';
+import { GraduationCap, Mail, Lock, ArrowRight, AlertCircle } from 'lucide-react';
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
@@ -15,7 +16,7 @@ const Login: React.FC = () => {
     setError('');
     setLoading(true);
 
-    const result = await login(email);
+    const result = await login(email, password);
     
     if (result.success) {
       navigate('/dashboard');
@@ -88,11 +89,11 @@ const Login: React.FC = () => {
               Welcome Back
             </h2>
             <p className="text-muted-foreground">
-              Sign in with your registered email to continue
+              Sign in to your account to continue
             </p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-5">
             {error && (
               <div className="flex items-center gap-3 p-4 bg-destructive/10 text-destructive rounded-lg">
                 <AlertCircle className="w-5 h-5 flex-shrink-0" />
@@ -118,6 +119,25 @@ const Login: React.FC = () => {
               </div>
             </div>
 
+            <div>
+              <label htmlFor="password" className="block text-sm font-medium text-foreground mb-2">
+                Password
+              </label>
+              <div className="relative">
+                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                <input
+                  type="password"
+                  id="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••"
+                  required
+                  minLength={6}
+                  className="form-input pl-12"
+                />
+              </div>
+            </div>
+
             <button
               type="submit"
               disabled={loading}
@@ -134,20 +154,19 @@ const Login: React.FC = () => {
             </button>
           </form>
 
-          <div className="mt-8 p-4 bg-muted rounded-lg">
-            <p className="text-sm text-muted-foreground">
-              <strong className="text-foreground">Note:</strong> Access is limited to registered 
-              users. If you don't have an account, please contact the administration.
+          <div className="mt-6 text-center">
+            <p className="text-muted-foreground">
+              Don't have an account?{' '}
+              <Link to="/register" className="text-primary font-medium hover:underline">
+                Register here
+              </Link>
             </p>
           </div>
 
-          {/* Demo Credentials Info */}
-          <div className="mt-6 p-4 border border-accent/30 bg-accent/5 rounded-lg">
-            <p className="text-sm font-medium text-accent mb-2">Demo Mode</p>
-            <p className="text-xs text-muted-foreground">
-              Add users to Firestore's <code className="bg-muted px-1 rounded">users</code> collection 
-              with fields: email, name, role (student/hod/admin/principal), and branch.
-            </p>
+          <div className="mt-4 text-center">
+            <Link to="/admin-login" className="text-sm text-muted-foreground hover:text-primary">
+              Admin Login →
+            </Link>
           </div>
         </div>
       </div>
